@@ -9011,8 +9011,24 @@ const commentCountAcrossIssues = issues
   .map(issue => issue.comments_count)
   .reduce((a, b) => a + b, 0);
 
-const openIssues = issues.map(issue => {
-  if(issue.state == 'open') {
-    return Object.assign({}, issue, {});
+const openIssues = issues.reduce((array, issue) => {
+  if(issue.state === 'open') {
+    return [...array, issue];
   }
-});
+  return array;
+}, []);
+
+const nonAutomaticIssues = issues.reduce((array, issue) => {
+  if(issue.body != 'This pull request has been automatically created by learn.co.') {
+    array.push(issue);
+  }
+  return array;
+}, []);
+
+const results = document.getElementById('results');
+results.innerHTML = nonAutomaticIssues.map(issue => `<tr>
+  <td>${issue.body}</td>
+  <td>${issue.created_at}</td>
+  <td>${issue.state}</td>
+  </tr>`)
+  .join('');
