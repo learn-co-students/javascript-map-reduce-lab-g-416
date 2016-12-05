@@ -9000,3 +9000,50 @@ const issues = [
     "url": "https://api.github.com/repos/learn-co-curriculum/js-donut-lab/issues/2"
   }
 ];
+
+// ## I'm not a robot
+// Some issues have been automatically created by the Learn.co bot. Let's filter these out, so we only see issues created by actual humans.
+//
+// * The result should be in a variable called `nonAutomaticIssues`
+// * This new array should only contain issues that are not automatically created
+// * Hint: check the `issue.body` for a clue
+//
+// ## Showing off
+// Now that we have our `nonAutomaticIssues`, let's print these out in a table in our HTML page. The base markup has been provided for you in `index.html` — all we need to do is add rows to the table body.
+//
+// * Use the DOM API to set the HTML of the table body to a list of table rows that have three columns: the issue body, the date and the state of the issue (open or closed)
+// * To easily create your HTML markup for all the rows, use `.map()`
+// * Hint: the `innerHTML` property expects a string, so don't forget to turn your array into one big string by using [`.join()`]
+
+const issuesWithUpdatedApiUrl = issues.map(function(issue){
+  return Object.assign({}, issue, {url: issue.url.replace('api.github.com', 'api-v2.github.com')});
+});
+
+const commentCountAcrossIssues = issues.map(function(issue){
+  return issue.comments_count;
+}).reduce(function(total, count) {
+  return total + count;
+}, 0);
+
+const openIssues = issues.reduce(function(openIssues, issue){
+  if (issue.state === 'open') {
+    return [...openIssues, issue];
+  }
+  return openIssues;
+}, []);
+
+const nonAutomaticIssues = issues.reduce(function(nonAutomaticIssues, issue){
+  if (issue.body === ''){
+    return [...nonAutomaticIssues, issue];
+  }
+  return nonAutomaticIssues;
+}, []);
+
+const $tbody = document.getElementById('results');
+$tbody.innerHTML = nonAutomaticIssues.map(function(issue){
+  return `<tr>
+    <td>${issue.body}</td>
+    <td>${issue.created_at}</td>
+    <td>${issue.state}</td>
+  </tr>`
+}).join('');
