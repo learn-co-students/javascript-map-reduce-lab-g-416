@@ -9000,3 +9000,19 @@ const issues = [
     "url": "https://api.github.com/repos/learn-co-curriculum/js-donut-lab/issues/2"
   }
 ];
+
+const issuesWithUpdatedApiUrl = issues.map(issue => {
+  return Object.assign({}, issue, {
+    url: issue.url.replace('api.github.com', 'api-v2.github.com')
+  })
+})
+
+const theComments = issues.map(issue => {
+  return comments_count
+})
+
+function theAddedComments(accumulator, currentValue) {
+  return accumulator + currentValue
+}
+
+const commentCountAcrossIssues = theComments.map(theAddedComments, 0)
