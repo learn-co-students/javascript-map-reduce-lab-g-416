@@ -9011,24 +9011,6 @@ const openIssues = issues.filter(issue => (issue.state === "open"))
 
 const nonAutomaticIssues = issues.filter(issue => (!issue.body.includes("automatically created by learn.co")))
 
-function tableDisplay() {
-	const table = document.getElementById("results")
-	
-	nonAutomaticIssues.map(issue => {
-		const row = document.createElement("tr");
-		const cell1 = document.createElement("td");
-		const cell2 = document.createElement("td");
-		const cell3 = document.createElement("td");
-
-		cell1.innerText = issue.body;
-		cell2.innerText = issue.created_at;
-		cell3.innerText = issue.state;
-
-		row.appendChild(cell1);
-		row.appendChild(cell2);
-		row.appendChild(cell3);
-		table.appendChild(row);
-	})
-}
-
-tableDisplay()
+document.getElementById("results").innerHTML = nonAutomaticIssues.map(issue =>
+	`<tr><td>${issue.body}</td><td>${issue.created_at}</td><td>${issue.state}</td></tr>`
+).join("")
