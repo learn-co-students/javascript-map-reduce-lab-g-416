@@ -12,6 +12,7 @@ const babelResult = babel.transformFileSync(path.resolve(__dirname, '..', 'index
   presets: ['es2015']
 });
 
+
 jsdom({
   html,
   src: babelResult.code
