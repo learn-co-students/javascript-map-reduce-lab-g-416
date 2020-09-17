@@ -9000,3 +9000,51 @@ const issues = [
     "url": "https://api.github.com/repos/learn-co-curriculum/js-donut-lab/issues/2"
   }
 ];
+
+
+const issuesWithUpdatedApiUrl = issues.map(issue => {
+  str = issue["url"];
+  return Object.assign({}, issue, {
+    "url": str.replace("https://api.github.com/", "https://api-v2.github.com/")
+  });
+})
+
+// console.log(issuesWithUpdatedApiUrl);
+
+const commentCount = issues.map(issue => issue.comments_count);
+
+const commentCountAcrossIssues = commentCount.reduce((accum, val) => accum + val, 0);
+// without using separate variable, chained together:
+// let commentCountAcrossIssues = issues.map(issue => {issue.comments_count}).reduce((a, b) => a + b, 0)
+
+
+// console.log(commentCountAcrossIssues);
+
+const openIssues = issues.reduce((open, issue) => {
+  // console.log(`open is ${JSON.stringify(open)}`);
+  if (issue.state === 'open') {
+    return [...open, issue];
+  }
+  return open;
+}, []);
+
+// console.log(openIssues);
+
+
+let nonAutomaticIssues = issues.reduce((human, issue) => {
+  if (!issue.body.includes("automatically created by learn.co.")) {
+    return [...human, issue];
+  }
+  return human;
+}, []);
+
+
+let humanIssuesTable = document.getElementById("results")
+humanIssuesTable.innerHTML = nonAutomaticIssues.map(issue => 
+  `<tr>
+    <td>${issue.body}</td>
+    <td>${issue.created_at}</td>
+    <td>${issue.state}</td>
+  </tr>`).join('')
+
+  console.log(humanIssuesTable);
