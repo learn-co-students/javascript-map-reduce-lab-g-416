@@ -9001,23 +9001,12 @@ const issues = [
   }
 ];
 
-//updating the API
-let replaceString = "api.github.com"
-let replacedString = "api-v2.github.com"
 const issuesWithUpdatedApiUrl = issues.map(issue => Object.assign({}, issue, {
-  url: issue.url.replace(replaceString, replacedString)
+  url: issue.url.replace("api.github.com", "api-v2.github.com")
 }))
-//Counting the comments
-// The result should be in a variable called commentCountAcrossIssues
-// First, map the issues array and pull out the comments_count, to make things easier
-// Next, reduce the array of comment counts and add them all together
-// Feel free to chain these operations on the issues array for brevity — no need for a temporary variable!
-const commentCountAcrossIssues = issues.map(issue => (issue.comments_count)).reduce((total, count) => total + count, 0);
-// Filtering for open issues
-// Looking at the data, it seems like some issues are closed already. Those aren't really relevant, so let's create a new array that only has open issues.
 
-// The result should be in a variable called openIssues []
-// This new array should only contain issues where issue.state is set to 'open' []
+const commentCountAcrossIssues = issues.map(issue => (issue.comments_count)).reduce((total, count) => total + count, 0);
+
 
 const openIssues = issues.reduce((openIssues, issue) => { if (issue.state === 'open'){
   return [...openIssues, issue]; 
@@ -9025,23 +9014,23 @@ const openIssues = issues.reduce((openIssues, issue) => { if (issue.state === 'o
   return openIssues;
 }, []);
 
-// I'm not a robot
-// Some issues have been automatically created by the Learn.co bot. Let's filter these out, so we only see issues created by actual humans.
-
-// The result should be in a variable called nonAutomaticIssues
-// This new array should only contain issues that are not automatically created
-// Hint: check the issue.body for a clue
-
-const nonAutomaticIssues = issues.reduce((nonAutomaticIssues, issue) => { if (!issue.body.includes("automatically")){
-  return [...nonAutomaticIssues, issue];
+const nonAutomaticIssues = issues.reduce((totalIssues, issue) => { 
+  const isAutomaticIssue = issue.body.includes('automatically created by learn.co');
+  if (!isAutomaticIssue) {
+  totalIssues.push(issue);
 }
-return nonAutomaticIssues;
+return totalIssues;
 }, []);
 
-// Showing off
-// Now that we have our nonAutomaticIssues, let's print these out in a table in our HTML page. The base markup has been provided for you in index.html — all we need to do is add rows to the table body.
 
-// Use the DOM API to set the HTML of the table body to a list of table rows that have three columns: the issue body, the date and the state of the issue (open or closed)
-// To easily create your HTML markup for all the rows, use .map()
-// Hint: the innerHTML property expects a string, so don't forget to turn your array into one big string by using .join()
+
+const $tbody = document.getElementById("results");
+$tbody.innerHTML = nonAutomaticIssues
+  .map(issue => `<tr>
+    <td>${issue.body}</td>
+    <td>${issue.created_at}</td>
+    <td>${issue.state}</td>
+    </tr>`
+  ).join('');
+
 
