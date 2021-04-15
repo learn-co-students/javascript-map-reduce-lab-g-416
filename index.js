@@ -9000,3 +9000,67 @@ const issues = [
     "url": "https://api.github.com/repos/learn-co-curriculum/js-donut-lab/issues/2"
   }
 ];
+
+// Updating the API
+const regex = /api.github.com/
+const replace = "api-v2.github.com"
+const issuesWithUpdatedApiUrl = issues.map(issue =>
+{
+  return Object.assign({}, issue,
+    {
+      url: issue.url.replace(regex, replace)
+    });
+  
+});
+console.log(issues[0].url);
+console.log(issuesWithUpdatedApiUrl[0].url);
+
+// Counting the comments
+const commentCountAcrossIssues = issues.map(issue => issue.comments_count).reduce((sum, commentCount) => sum + commentCount);
+console.log(commentCountAcrossIssues);
+
+// Filtering for open issues
+const openIssues = issues.reduce((issuesOpen, currentIssue) =>
+{
+  if (currentIssue.state === "open")
+  {
+    return [...issuesOpen, currentIssue];
+  }
+
+  return issuesOpen;
+}, []);
+// const openIssues = issues.filter(issue => 
+// {
+//   if (issue.state === "open")
+//   {
+//     return issue;
+//   }
+// });
+console.log(openIssues)
+
+// I'm not a robot
+const regex2 = /This pull request has been automatically created by learn.co./
+const nonAutomaticIssues = issues.reduce((nonAutoIssues, currentIssue) =>
+{
+  if (!currentIssue.body.match(regex2))
+  {
+    return [...nonAutoIssues, currentIssue];
+  }
+
+  return nonAutoIssues;
+}, []);
+console.log(nonAutomaticIssues);
+
+// Showing off
+const $tbody = document.getElementById("results");
+
+$tbody.innerHTML = nonAutomaticIssues.map(issue =>
+{
+  `
+    <tr>
+      <td>${issue.body}</td>
+      <td>${issue.created_at}</td>
+      <td>${issue.state}</td>
+    </tr>
+  `
+}).join("");
